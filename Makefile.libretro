@@ -48,7 +48,6 @@ EXTRA_LDFLAGS =
 ifeq ($(platform), unix)
 	TARGET := $(TARGET_NAME)_libretro.so
 	fpic := -fPIC
-	THREAD_RENDERING = 1
 ifneq ($(findstring SunOS,$(shell uname -s)),)
 	CC = gcc
 endif
@@ -57,6 +56,12 @@ ifneq ($(findstring __thumb__,$(shell $(CC) -E -dD $(CFLAGS) include/arm_feature
 	# must disable thumb as recompiler can't handle it
 	CFLAGS += -marm
 endif
+endif
+
+ifeq ($(ARCH), $(filter $(ARCH), arm aarch64))
+	THREAD_RENDERING = 0
+else
+	THREAD_RENDERING = 1
 endif
 
 # ODROIDN2
